@@ -3,9 +3,8 @@
 namespace App\Http\Requests\Habits;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreHabitRequest extends FormRequest
+class StoreHabitCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +23,7 @@ class StoreHabitRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'description' => 'required|string',
-            'entry_type' => Rule::in(['number', 'boolean']),
+            'color' => 'required|string|max:255',
         ];
     }
 }

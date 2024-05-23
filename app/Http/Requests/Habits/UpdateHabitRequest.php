@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Habits;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateHabitRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateHabitRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,9 @@ class UpdateHabitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:habit_categories,id',
+            'entry_type' => Rule::in(['number', 'boolean']),
         ];
     }
 }
