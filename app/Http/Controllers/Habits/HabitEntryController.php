@@ -8,7 +8,6 @@ use App\Models\HabitEntry;
 use App\Services\Habits\HabitEntryService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class HabitEntryController extends Controller
 {

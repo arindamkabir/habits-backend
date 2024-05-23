@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use App\Traits\ApiResponse;
-use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -18,12 +17,12 @@ class LoginController extends Controller
 
         $user = User::query()->firstWhere('email', $request->email);
 
-        $token = $user->createToken('User ' . $user->email)->plainTextToken;
+        $token = $user->createToken('User '.$user->email)->plainTextToken;
 
         return $this->ok(
             'Authenticated',
             [
-                'token' => $token
+                'token' => $token,
             ]
         );
     }

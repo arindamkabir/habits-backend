@@ -39,7 +39,7 @@ class HabitService
 
     public function destroy(string $id): bool
     {
-        $habit  = Habit::query()
+        $habit = Habit::query()
             ->findOrFail($id);
 
         return $habit->delete();

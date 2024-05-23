@@ -14,7 +14,7 @@ trait ApiResponse
         return response()->json([
             'data' => $data,
             'message' => $message,
-            'status' => $statusCode
+            'status' => $statusCode,
         ], $statusCode);
     }
 
@@ -23,12 +23,12 @@ trait ApiResponse
         if (is_string($errors)) {
             return response()->json([
                 'message' => $errors,
-                'status' => $statusCode
+                'status' => $statusCode,
             ], $statusCode);
         }
 
         return response()->json([
-            'errors' => $errors
+            'errors' => $errors,
         ]);
     }
 
@@ -37,7 +37,7 @@ trait ApiResponse
         return $this->error([
             'status' => 401,
             'message' => $message,
-            'source' => ''
+            'source' => '',
         ]);
     }
 }

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\WeightEntry;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Seeder;

@@ -10,12 +10,12 @@ class WeightService
     public function storeEntry(array $attributes): WeightEntry
     {
         $existingEntries = WeightEntry::query()
-            ->where("user_id", Auth::id())
-            ->whereDate("date", $attributes["date"])
+            ->where('user_id', Auth::id())
+            ->whereDate('date', $attributes['date'])
             ->get();
 
         if (count($existingEntries) > 0) {
-            throw new \Exception("Entry already exists"); //? Create exception class
+            throw new \Exception('Entry already exists'); //? Create exception class
         }
 
         $weightEntry = new WeightEntry;
@@ -43,6 +43,7 @@ class WeightService
     public function deleteEntry(string $id): bool
     {
         $weightEntry = WeightEntry::query()->findOrFail($id);
+
         return $weightEntry->delete();
     }
 }

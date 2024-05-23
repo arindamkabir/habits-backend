@@ -24,7 +24,7 @@ class StoreWeightEntryRequest extends FormRequest
         return [
             'entry' => 'required|numeric',
             'date' => 'required|date',
-            'note' => 'string'
+            'note' => 'string',
         ];
     }
 }

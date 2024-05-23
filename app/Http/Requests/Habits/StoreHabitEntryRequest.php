@@ -25,7 +25,7 @@ class StoreHabitEntryRequest extends FormRequest
             'entry' => 'required|numeric',
             'habit_id' => 'required|exists:habits,id',
             'date' => 'required|date',
-            'note' => 'string'
+            'note' => 'string',
         ];
     }
 }

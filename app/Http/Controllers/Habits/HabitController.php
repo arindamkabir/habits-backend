@@ -30,10 +30,12 @@ class HabitController extends Controller
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
 
-        if (!$start_date || !$end_date) return $this->error("No start date and/or end date found!.", 422);
+        if (! $start_date || ! $end_date) {
+            return $this->error('No start date and/or end date found!.', 422);
+        }
 
         $habits = Habit::query()
-            ->with(["category", "entries" => function ($query) use ($start_date, $end_date) {
+            ->with(['category', 'entries' => function ($query) use ($start_date, $end_date) {
                 $query->whereBetween('date', [$start_date, $end_date]);
             }])
             ->where('user_id', Auth::id())
@@ -45,7 +47,7 @@ class HabitController extends Controller
     public function show(string $slug)
     {
         $habit = Habit::query()
-            ->with(["category", "entries"])
+            ->with(['category', 'entries'])
             ->where('slug', $slug)
             ->currentUser()
             ->firstOrFail();

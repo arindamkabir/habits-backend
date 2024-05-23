@@ -30,7 +30,9 @@ class WeightEntryController extends Controller
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
 
-        if (!$start_date || !$end_date) return $this->error("No start date and/or end date found!.", 422);
+        if (! $start_date || ! $end_date) {
+            return $this->error('No start date and/or end date found!.', 422);
+        }
 
         $entries = WeightEntry::query()
             ->whereBetween('date', [$start_date, $end_date])
@@ -46,7 +48,7 @@ class WeightEntryController extends Controller
 
         $entry = $this->weightService->storeEntry($validated);
 
-        return $this->success("Weight entry added successfully.", $entry);
+        return $this->success('Weight entry added successfully.', $entry);
     }
 
     public function update(UpdateWeightEntryRequest $request, string $id): JsonResponse
@@ -55,13 +57,13 @@ class WeightEntryController extends Controller
 
         $entry = $this->weightService->updateEntry($validated, $id);
 
-        return $this->success("Weight entry updated successfully.", $entry);
+        return $this->success('Weight entry updated successfully.', $entry);
     }
 
     public function delete(string $id): JsonResponse
     {
         $deleted = $this->weightService->deleteEntry($id);
 
-        return $this->success("Weight entry deleted successfully.");
+        return $this->success('Weight entry deleted successfully.');
     }
 }

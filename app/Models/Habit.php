@@ -18,18 +18,18 @@ class Habit extends Model
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo(HabitCategory::class, "category_id");
+        return $this->belongsTo(HabitCategory::class, 'category_id');
     }
 
     public function entries(): HasMany
     {
-        return $this->hasMany(HabitEntry::class, "habit_id");
+        return $this->hasMany(HabitEntry::class, 'habit_id');
     }
 
     // *** Scopes
 
     public function scopeCurrentUser(Builder $query): void
     {
-        $query->where("user_id", Auth::id());
+        $query->where('user_id', Auth::id());
     }
 }

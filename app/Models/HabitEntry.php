@@ -23,8 +23,8 @@ class HabitEntry extends Model
 
     public function scopeCurrentUser(Builder $query): void
     {
-        $query->whereHas("habit", function ($query2) {
-            $query2->where("user_id", Auth::id());
+        $query->whereHas('habit', function ($query2) {
+            $query2->where('user_id', Auth::id());
         });
     }
 }
