@@ -18,13 +18,16 @@ class HabitResource extends JsonResource
             'id' => $this->id,
             'slug' => $this->slug,
             'name' => $this->name,
+            'category_id' => $this->category_id,
+            'user_id' => $this->user_id,
             'description' => $this->when(
                 $request->routeIs('habits.show'),
                 $this->description
             ),
+            'category' => $this->category,
+            'entries' => $this->entries,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'relationships' => []
         ];
     }
 }

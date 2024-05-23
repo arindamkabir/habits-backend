@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Habits\HabitCategoryController;
 use App\Http\Controllers\Habits\HabitController;
+use App\Http\Controllers\Habits\HabitEntryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -11,12 +13,18 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/login', LoginController::class);
 
-Route::prefix('/habits')->name('habits.')->group(function () {
+Route::middleware(['auth:sanctum'])->prefix('/habits')->name('habits.')->group(function () {
     Route::get('/', [HabitController::class, 'index'])->name('index');
-    // Route::get('/all', [HabitController::class, 'allWithEntries'])->name('allWithEntries');
-    // Route::post('/', [HabitController::class, 'store'])->name('store');
-    // Route::post('/entries', [EntryController::class, 'save'])->name('entries.save');
+    Route::post('/', [HabitController::class, 'store'])->name('store');
 
-    // Route::get('/{slug}', [HabitController::class, 'show'])->name('show');
-    // Route::delete('/{id}', [HabitController::class, 'destroy'])->name('destroy');
+    Route::post('/entries', [HabitEntryController::class, 'save'])->name('entries.save');
+
+    Route::prefix('/categories')->name('categories.')->group(function () {
+        Route::get('/', [HabitCategoryController::class, 'index'])->name('index');
+        Route::post('/', [HabitCategoryController::class, 'store'])->name('store');
+    });
+
+    Route::get('/{slug}', [HabitController::class, 'show'])->name('show');
+    Route::put('/{slug}', [HabitController::class, 'update'])->name('update');
+    Route::delete('/{id}', [HabitController::class, 'destroy'])->name('destroy');
 });

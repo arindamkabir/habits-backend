@@ -22,9 +22,13 @@ class HabitService
         });
     }
 
-    public function update(array $validated, Habit $habit): Habit
+    public function update(array $validated, string $slug): Habit
     {
-        return DB::transaction(function () use ($habit, $validated) {
+        return DB::transaction(function () use ($slug, $validated) {
+            $habit = Habit::query()
+                ->where('slug', $slug)
+                ->firstOrFail();
+
             $habit->name = $validated['name'];
             $habit->category_id = $validated['category_id'];
             $habit->save();

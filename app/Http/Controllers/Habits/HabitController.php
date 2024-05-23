@@ -57,22 +57,22 @@ class HabitController extends Controller
 
         $habit = $this->habitService->store($validated);
 
-        $this->success('Habit stored successfully.', $habit);
+        return $this->success('Habit stored successfully.', $habit);
     }
 
-    public function update(UpdateHabitRequest $request, Habit $habit)
+    public function update(UpdateHabitRequest $request, string $slug)
     {
         $validated = $request->validated();
 
-        $this->habitService->update($validated, $habit);
+        $this->habitService->update($validated, $slug);
 
-        $this->success('Habit updated successfully.');
+        return $this->success('Habit updated successfully.');
     }
 
     public function destroy(string $id)
     {
         $this->habitService->destroy($id);
 
-        $this->success('Habit deleted successfully.');
+        return $this->success('Habit deleted successfully.');
     }
 }

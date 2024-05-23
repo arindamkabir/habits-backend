@@ -37,6 +37,6 @@ class HabitCategoryController extends Controller
 
         $category = $this->categoryService->store($validated);
 
-        $this->success("Category stored successfully.", $category);
+        return $this->success("Category stored successfully.", $category);
     }
 }

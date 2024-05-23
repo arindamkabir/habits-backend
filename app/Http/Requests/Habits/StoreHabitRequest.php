@@ -24,7 +24,7 @@ class StoreHabitRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'required|exists:habit_categories,id',
             'description' => 'required|string',
             'entry_type' => Rule::in(['number', 'boolean']),
         ];

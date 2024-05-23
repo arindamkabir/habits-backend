@@ -35,6 +35,6 @@ class HabitEntryController extends Controller
             $responseEntry = $this->entryService->store($validated);
         }
 
-        $this->success('Entry added successfully', $responseEntry);
+        return $this->success('Entry added successfully', $responseEntry);
     }
 }
