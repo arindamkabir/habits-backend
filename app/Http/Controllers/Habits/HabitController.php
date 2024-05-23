@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Habits;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Habits\StoreHabitRequest;
+use App\Http\Requests\Habits\UpdateHabitRequest;
 use App\Http\Resources\HabitResource;
 use App\Models\Habit;
+use App\Services\Habits\HabitService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +15,13 @@ use Illuminate\Support\Facades\Auth;
 class HabitController extends Controller
 {
     use ApiResponse;
+
+    private HabitService $habitService;
+
+    public function __construct(HabitService $habitService)
+    {
+        $this->habitService = $habitService;
+    }
 
     public function index(Request $request)
     {
@@ -28,5 +38,41 @@ class HabitController extends Controller
             ->get();
 
         return HabitResource::collection($habits);
+    }
+
+    public function show(string $slug)
+    {
+        $habit = Habit::query()
+            ->with(["category", "entries"])
+            ->where('slug', $slug)
+            ->currentUser()
+            ->firstOrFail();
+
+        return new HabitResource($habit);
+    }
+
+    public function store(StoreHabitRequest $request)
+    {
+        $validated = $request->validated();
+
+        $habit = $this->habitService->store($validated);
+
+        $this->success('Habit stored successfully.', $habit);
+    }
+
+    public function update(UpdateHabitRequest $request, Habit $habit)
+    {
+        $validated = $request->validated();
+
+        $this->habitService->update($validated, $habit);
+
+        $this->success('Habit updated successfully.');
+    }
+
+    public function destroy(string $id)
+    {
+        $this->habitService->destroy($id);
+
+        $this->success('Habit deleted successfully.');
     }
 }
