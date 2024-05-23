@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class HabitResource extends JsonResource
+class HabitCategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,15 +16,11 @@ class HabitResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'slug' => $this->slug,
             'name' => $this->name,
-            'description' => $this->when(
-                $request->routeIs('habits.show'),
-                $this->description
-            ),
+            'color' => $this->color,
+            'icon' => $this->icon,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'relationships' => []
         ];
     }
 }
