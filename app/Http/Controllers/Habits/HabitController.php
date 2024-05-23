@@ -9,7 +9,9 @@ use App\Http\Resources\HabitResource;
 use App\Models\Habit;
 use App\Services\Habits\HabitService;
 use App\Traits\ApiResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Auth;
 
 class HabitController extends Controller
@@ -23,7 +25,7 @@ class HabitController extends Controller
         $this->habitService = $habitService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): ResourceCollection
     {
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
@@ -51,7 +53,7 @@ class HabitController extends Controller
         return new HabitResource($habit);
     }
 
-    public function store(StoreHabitRequest $request)
+    public function store(StoreHabitRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
@@ -60,7 +62,7 @@ class HabitController extends Controller
         return $this->success('Habit stored successfully.', $habit);
     }
 
-    public function update(UpdateHabitRequest $request, string $slug)
+    public function update(UpdateHabitRequest $request, string $slug): JsonResponse
     {
         $validated = $request->validated();
 
@@ -69,7 +71,7 @@ class HabitController extends Controller
         return $this->success('Habit updated successfully.');
     }
 
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
         $this->habitService->destroy($id);
 

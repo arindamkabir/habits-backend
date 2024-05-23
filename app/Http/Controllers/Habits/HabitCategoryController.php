@@ -8,7 +8,8 @@ use App\Http\Resources\HabitCategoryResource;
 use App\Models\HabitCategory;
 use App\Services\Habits\HabitCategoryService;
 use App\Traits\ApiResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Auth;
 
 class HabitCategoryController extends Controller
@@ -22,7 +23,7 @@ class HabitCategoryController extends Controller
         $this->categoryService = $categoryService;
     }
 
-    public function index()
+    public function index(): ResourceCollection
     {
         $categories = HabitCategory::query()
             ->where('user_id', Auth::id())
@@ -31,7 +32,7 @@ class HabitCategoryController extends Controller
         return HabitCategoryResource::collection($categories);
     }
 
-    public function store(StoreHabitCategoryRequest $request)
+    public function store(StoreHabitCategoryRequest $request): JsonResponse
     {
         $validated = $request->validated();
 

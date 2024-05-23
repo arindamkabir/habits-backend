@@ -7,6 +7,7 @@ use App\Http\Requests\Habits\StoreHabitEntryRequest;
 use App\Models\HabitEntry;
 use App\Services\Habits\HabitEntryService;
 use App\Traits\ApiResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class HabitEntryController extends Controller
@@ -20,7 +21,7 @@ class HabitEntryController extends Controller
         $this->entryService = $entryService;
     }
 
-    public function save(StoreHabitEntryRequest $request)
+    public function save(StoreHabitEntryRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
