@@ -6,7 +6,7 @@ use App\Models\HabitCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class CategoryService
+class HabitCategoryService
 {
     public function store(array $validated): HabitCategory
     {
