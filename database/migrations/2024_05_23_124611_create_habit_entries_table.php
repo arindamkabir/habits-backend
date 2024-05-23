@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('habit_entries', function (Blueprint $table) {
             $table->id();
+            $table->integer('entry');
+            $table->foreignId('habit_id')->constrained('habits', 'id');
+            $table->tinyText('note')->nullable();
+            $table->dateTime('date');
             $table->timestamps();
         });
     }

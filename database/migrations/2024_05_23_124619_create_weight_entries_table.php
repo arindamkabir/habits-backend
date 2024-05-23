@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('weight_entries', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users', 'id');
+            $table->integer('entry');
+            $table->string('note')->nullable();
+            $table->dateTime('date')->unique();
             $table->timestamps();
         });
     }
