@@ -1,13 +1,23 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Health;
 
 use App\Models\WeightEntry;
+use Illuminate\Support\Facades\Auth;
 
 class WeightService
 {
     public function storeEntry(array $attributes): WeightEntry
     {
+        $existingEntries = WeightEntry::query()
+            ->where("user_id", Auth::id())
+            ->whereDate("date", $attributes["date"])
+            ->get();
+
+        if (count($existingEntries) > 0) {
+            throw new \Exception("Entry already exists"); //? Create exception class
+        }
+
         $weightEntry = new WeightEntry;
         $weightEntry->entry = $attributes['entry'];
         $weightEntry->note = isset($attributes['note']) ? $attributes['note'] : null;

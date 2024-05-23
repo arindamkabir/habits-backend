@@ -1,12 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Health;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Health\StoreWeightEntryRequest;
 use App\Http\Requests\Health\UpdateWeightEntryRequest;
-use App\Services\WeightService;
+use App\Http\Resources\Health\WeightEntryResource;
+use App\Models\WeightEntry;
+use App\Services\Health\WeightService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
 class WeightEntryController extends Controller
 {
@@ -17,6 +23,21 @@ class WeightEntryController extends Controller
     public function __construct(WeightService $weightService)
     {
         $this->weightService = $weightService;
+    }
+
+    public function index(Request $request): ResourceCollection
+    {
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        if (!$start_date || !$end_date) return $this->error("No start date and/or end date found!.", 422);
+
+        $entries = WeightEntry::query()
+            ->whereBetween('date', [$start_date, $end_date])
+            ->where('user_id', Auth::id())
+            ->get();
+
+        return WeightEntryResource::collection($entries);
     }
 
     public function store(StoreWeightEntryRequest $request): JsonResponse

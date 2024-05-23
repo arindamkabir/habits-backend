@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users', 'id');
             $table->integer('entry');
             $table->string('note')->nullable();
-            $table->dateTime('date')->unique();
+            $table->dateTime('date');
             $table->timestamps();
         });
     }

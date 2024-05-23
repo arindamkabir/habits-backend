@@ -9,6 +9,14 @@ class HabitEntryService
 {
     public function store(array $validated): HabitEntry
     {
+        $existingEntries = HabitEntry::query()
+            ->whereDate("date", $validated["date"])
+            ->get();
+
+        if (count($existingEntries) > 0) {
+            throw new \Exception("Entry already exists"); //? Create exception class
+        }
+
         return DB::transaction(function () use ($validated) {
             $entry = new HabitEntry;
             $entry->entry = $validated['entry'];
