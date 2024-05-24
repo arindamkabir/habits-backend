@@ -7,12 +7,14 @@ use App\Http\Requests\Habits\StoreHabitRequest;
 use App\Http\Requests\Habits\UpdateHabitRequest;
 use App\Http\Resources\HabitResource;
 use App\Models\Habit;
+use App\Models\WeightEntry;
 use App\Services\Habits\HabitService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HabitController extends Controller
 {
@@ -25,12 +27,12 @@ class HabitController extends Controller
         $this->habitService = $habitService;
     }
 
-    public function index(Request $request): ResourceCollection
+    public function index(Request $request): JsonResponse
     {
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
 
-        if (! $start_date || ! $end_date) {
+        if (!$start_date || !$end_date) {
             return $this->error('No start date and/or end date found!.', 422);
         }
 

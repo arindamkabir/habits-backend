@@ -7,6 +7,7 @@ use App\Http\Requests\Health\StoreWeightEntryRequest;
 use App\Http\Requests\Health\UpdateWeightEntryRequest;
 use App\Http\Resources\Health\WeightEntryResource;
 use App\Models\WeightEntry;
+use App\Services\Health\WeightChartService;
 use App\Services\Health\WeightService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -19,10 +20,12 @@ class WeightEntryController extends Controller
     use ApiResponse;
 
     private WeightService $weightService;
+    private WeightChartService $weightChartService;
 
-    public function __construct(WeightService $weightService)
+    public function __construct(WeightService $weightService, WeightChartService $weightChartService)
     {
         $this->weightService = $weightService;
+        $this->weightChartService = $weightChartService;
     }
 
     public function index(Request $request): ResourceCollection
@@ -30,8 +33,8 @@ class WeightEntryController extends Controller
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
 
-        if (! $start_date || ! $end_date) {
-            return $this->error('No start date and/or end date found!.', 422);
+        if (!$start_date || !$end_date) {
+            return $this->error('No start date and/or end date found!.', 403);
         }
 
         $entries = WeightEntry::query()
@@ -40,6 +43,23 @@ class WeightEntryController extends Controller
             ->get();
 
         return WeightEntryResource::collection($entries);
+    }
+
+    public function details(Request $request): JsonResponse
+    {
+        $year = $request->input('year');
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        if ($start_date && $end_date) {
+            $data = $this->weightChartService->getChartData($start_date, $end_date);
+        } elseif ($year) {
+            $data = $this->weightChartService->getYearlyChartData($year);
+        } else {
+            $data = $this->weightChartService->getYearlyChartData(date('Y'));
+        }
+
+        return response()->json($data, 200);
     }
 
     public function store(StoreWeightEntryRequest $request): JsonResponse
