@@ -12,8 +12,8 @@ class WeightChartService
     public function getChartData($start_date, $end_date): array
     {
         $entries = WeightEntry::query()
-            ->whereDate("date", ">=", $start_date)
-            ->whereDate("date", "<=", $end_date)
+            ->whereDate('date', '>=', $start_date)
+            ->whereDate('date', '<=', $end_date)
             ->get();
 
         $chartData = [];
@@ -36,14 +36,15 @@ class WeightChartService
 
         foreach ($period as $date) {
             $currentEntry = $entries
-                ->where('date', $date->format('Y-m-d') . " 00:00:00")
+                ->where('date', $date->format('Y-m-d').' 00:00:00')
                 ->first();
 
-            if ($currentEntry)
+            if ($currentEntry) {
                 $chartData[] = [
                     'label' => $date->format('d M'),
                     'value' => $currentEntry->entry,
                 ];
+            }
         }
 
         return $chartData;

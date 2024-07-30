@@ -29,7 +29,7 @@ class HabitController extends Controller
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
 
-        if (!$start_date || !$end_date) {
+        if (! $start_date || ! $end_date) {
             return $this->error('No start date and/or end date found!.', 422);
         }
 

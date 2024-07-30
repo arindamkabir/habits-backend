@@ -18,7 +18,7 @@ class WeightEntrySeeder extends Seeder
         );
 
         foreach ($period as $key => $date) {
-            $weightEntry = new WeightEntry();
+            $weightEntry = new WeightEntry;
             $weightEntry->entry = fake()->numberBetween(78, 86);
             $weightEntry->note = fake()->text(100);
             $weightEntry->date = $date->format('Y-m-d');

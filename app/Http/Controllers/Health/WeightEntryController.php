@@ -20,6 +20,7 @@ class WeightEntryController extends Controller
     use ApiResponse;
 
     private WeightService $weightService;
+
     private WeightChartService $weightChartService;
 
     public function __construct(WeightService $weightService, WeightChartService $weightChartService)
@@ -33,7 +34,7 @@ class WeightEntryController extends Controller
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
 
-        if (!$start_date || !$end_date) {
+        if (! $start_date || ! $end_date) {
             return $this->error('No start date and/or end date found!.', 403);
         }
 
@@ -59,7 +60,7 @@ class WeightEntryController extends Controller
             $data = $this->weightChartService->getYearlyChartData(date('Y'));
         }
 
-        return response()->json(["data" => $data], 200);
+        return response()->json(['data' => $data], 200);
     }
 
     public function store(StoreWeightEntryRequest $request): JsonResponse
