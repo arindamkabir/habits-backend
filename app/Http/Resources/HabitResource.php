@@ -24,8 +24,12 @@ class HabitResource extends JsonResource
                 $request->routeIs('habits.show'),
                 $this->description
             ),
-            'category' => $this->category,
-            'entries' => $this->entries,
+            'category' => $this->whenLoaded('category', function () {
+                return new HabitCategoryResource($this->category);
+            }),
+            'entries' => $this->whenLoaded('entries', function () {
+                return new HabitEntryResource($this->entries);
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
