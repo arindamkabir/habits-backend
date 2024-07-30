@@ -59,7 +59,7 @@ class WeightEntryController extends Controller
             $data = $this->weightChartService->getYearlyChartData(date('Y'));
         }
 
-        return response()->json($data, 200);
+        return response()->json(["data" => $data], 200);
     }
 
     public function store(StoreWeightEntryRequest $request): JsonResponse

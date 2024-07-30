@@ -7,14 +7,11 @@ use App\Http\Requests\Habits\StoreHabitRequest;
 use App\Http\Requests\Habits\UpdateHabitRequest;
 use App\Http\Resources\HabitResource;
 use App\Models\Habit;
-use App\Models\WeightEntry;
 use App\Services\Habits\HabitService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class HabitController extends Controller
 {
