@@ -19,7 +19,7 @@ class HabitEntryResource extends JsonResource
             'entry' => $this->entry,
             'note' => $this->note,
             'date' => $this->date,
-            'habit_id' => $this->when(false, $this->habit_id), // hiding this for now
+            'habit_id' => $this->habit_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

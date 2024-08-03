@@ -14,6 +14,8 @@ class Habit extends Model
 {
     use GenerateUniqueSlugTrait, HasFactory;
 
+    // Add enum for entry_type
+
     // *** Relationships
 
     public function category(): BelongsTo
