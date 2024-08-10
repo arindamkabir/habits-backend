@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Habits\StoreHabitRequest;
 use App\Http\Requests\Habits\UpdateHabitRequest;
 use App\Http\Resources\HabitResource;
-use App\Models\Habit;
 use App\Services\Habits\HabitService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class HabitController extends Controller
 {
@@ -24,34 +24,42 @@ class HabitController extends Controller
         $this->habitService = $habitService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): ResourceCollection
     {
-        $start_date = $request->input('start_date');
-        $end_date = $request->input('end_date');
-
-        if (!$start_date || !$end_date) {
+        if (!$request->input('start_date') || !$request->input('end_date')) {
             return $this->error('No start date and/or end date found!.', 422);
-        }
+        };
 
-        $habits = Habit::query()
-            ->with(['category', 'entries' => function ($query) use ($start_date, $end_date) {
-                $query->whereBetween('date', [$start_date, $end_date]);
-            }])
-            ->where('user_id', Auth::id())
-            ->get();
-
-        return HabitResource::collection($habits);
+        return HabitResource::collection(
+            $this->habitService->list($request->all())
+        );
     }
 
-    public function show(string $slug)
+    public function show(string $slug): JsonResource
     {
-        $habit = Habit::query()
-            ->with(['category', 'entries'])
-            ->where('slug', $slug)
-            ->currentUser()
-            ->firstOrFail();
+        return HabitResource::make(
+            $this->habitService->details($slug)
+        );
+    }
 
-        return new HabitResource($habit);
+    public function chart(string $slug): JsonResponse
+    {
+        return $this->success(
+            'Habit chart data retrieved successfully.',
+            $this->habitService->monthlyChart($slug)
+        );
+    }
+
+    public function pieChart(Request $request, string $slug): JsonResponse
+    {
+        if (!$request->input('time_period')) {
+            return $this->error('No time period found!.', 422);
+        };
+
+        return $this->success(
+            'Habit pie chart data retrieved successfully.',
+            $this->habitService->pieChart($slug, $request->time_period)
+        );
     }
 
     public function store(StoreHabitRequest $request): JsonResponse
