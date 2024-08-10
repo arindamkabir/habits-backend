@@ -15,27 +15,31 @@ Route::get('/user', function (Request $request) {
 Route::post('/login', LoginController::class);
 
 Route::middleware(['auth:sanctum'])->prefix('/habits')->name('habits.')->group(function () {
-    Route::get('/', [HabitController::class, 'index'])->name('index');
-    Route::post('/', [HabitController::class, 'store'])->name('store');
-
-    Route::post('/entries', [HabitEntryController::class, 'save'])->name('entries.save');
-
-    Route::prefix('/categories')->name('categories.')->group(function () {
-        Route::get('/', [HabitCategoryController::class, 'index'])->name('index');
-        Route::post('/', [HabitCategoryController::class, 'store'])->name('store');
+    Route::controller(HabitController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{slug}', 'show')->name('show');
+        Route::put('/{slug}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::get('/chart/{slug}', 'chart')->name('chart');
+        Route::get('/pie-chart/{slug}', 'pieChart')->name('pie-chart');
     });
 
-    Route::get('/{slug}', [HabitController::class, 'show'])->name('show');
-    Route::put('/{slug}', [HabitController::class, 'update'])->name('update');
-    Route::delete('/{id}', [HabitController::class, 'destroy'])->name('destroy');
+    Route::get('/{slug}/entries', [HabitEntryController::class, 'list'])->name('entries.list');
+    Route::post('/entries', [HabitEntryController::class, 'save'])->name('entries.save');
+
+    Route::prefix('/categories')->name('categories.')->controller(HabitCategoryController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+    });
 });
 
 Route::middleware(['auth:sanctum'])->prefix('/health')->name('health.')->group(function () {
-    Route::prefix('/weight-entries')->name('weight-entries.')->group(function () {
-        Route::get('/', [WeightEntryController::class, 'index'])->name('index');
-        Route::post('/', [WeightEntryController::class, 'store'])->name('store');
-        Route::get('/details', [WeightEntryController::class, 'details'])->name('details');
-        Route::put('/{id}', [WeightEntryController::class, 'update'])->name('update');
-        Route::delete('/{id}', [WeightEntryController::class, 'delete'])->name('delete');
+    Route::prefix('/weight-entries')->name('weight-entries.')->controller(WeightEntryController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::get('/details', 'details')->name('details');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'delete')->name('delete');
     });
 });
