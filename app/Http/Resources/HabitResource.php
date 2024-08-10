@@ -30,6 +30,7 @@ class HabitResource extends JsonResource
             'entries' => $this->whenLoaded('entries', function () {
                 return HabitEntryResource::collection($this->entries);
             }),
+            'entry_type' => $this->entry_type,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
