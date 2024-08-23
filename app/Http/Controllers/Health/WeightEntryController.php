@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Health;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Health\SaveWeightEntryRequest;
-use App\Services\Health\WeightChartService;
-use App\Services\Health\WeightService;
+use App\Services\Health\Weight\WeightService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

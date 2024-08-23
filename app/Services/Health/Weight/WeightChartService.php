@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Health;
+namespace App\Services\Health\Weight;
 
 use App\Models\WeightEntry;
 use Carbon\Carbon;
