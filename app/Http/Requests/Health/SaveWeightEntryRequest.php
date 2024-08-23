@@ -4,7 +4,7 @@ namespace App\Http\Requests\Health;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateWeightEntryRequest extends FormRequest
+class SaveWeightEntryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,6 @@ class UpdateWeightEntryRequest extends FormRequest
         return [
             'entry' => 'required|numeric',
             'date' => 'required|date',
-            'note' => 'string',
         ];
     }
 }

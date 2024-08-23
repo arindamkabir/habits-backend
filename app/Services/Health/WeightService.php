@@ -7,20 +7,59 @@ use Illuminate\Support\Facades\Auth;
 
 class WeightService
 {
-    public function storeEntry(array $attributes): WeightEntry
+    private WeightChartService $weightChartService;
+
+    public function __construct(WeightChartService $weightChartService)
     {
-        $existingEntries = WeightEntry::query()
+        $this->weightChartService = $weightChartService;
+    }
+
+    public function chart(string $timePeriod)
+    {
+        $startEnd = [
+            'week' => [now()->startOfWeek(), now()->endOfWeek()],
+            '2weeks' => [now()->subWeek()->startOfWeek(), now()->endOfWeek()],
+            'month' => [now()->startOfMonth(), now()->endOfMonth()],
+            '3months' => [now()->subMonths(2)->startOfMonth(), now()->endOfMonth()],
+            '6months' => [now()->subMonths(5)->startOfMonth(), now()->endOfMonth()],
+            'year' => [now()->startOfYear(), now()->endOfYear()],
+        ];
+
+        [$start, $end] = $startEnd[$timePeriod];
+
+        return ($timePeriod === 'year' || $timePeriod === '6months')
+            ? $this->weightChartService->monthly($start, $end)
+            : $this->weightChartService->daily($start, $end);
+    }
+
+    public function entry(string $date)
+    {
+        $weightEntry = WeightEntry::query()
+            ->where('date', $date)
             ->where('user_id', Auth::id())
-            ->whereDate('date', $attributes['date'])
-            ->get();
+            ->first();
 
-        if (count($existingEntries) > 0) {
-            throw new \Exception('Entry already exists'); //? Create exception class
-        }
+        return (isset($weightEntry))
+            ? $weightEntry->entry
+            : 0;
+    }
 
+    public function save(array $attributes): WeightEntry
+    {
+        $entry = WeightEntry::query()
+            ->where('date', $attributes['date'])
+            ->where('user_id', Auth::id())
+            ->first();
+
+        return isset($entry)
+            ?  $this->update($attributes, $entry)
+            : $this->store($attributes);
+    }
+
+    private function store(array $attributes): WeightEntry
+    {
         $weightEntry = new WeightEntry;
         $weightEntry->entry = $attributes['entry'];
-        $weightEntry->note = isset($attributes['note']) ? $attributes['note'] : null;
         $weightEntry->date = $attributes['date'];
         $weightEntry->user_id = auth()->id();
         $weightEntry->save();
@@ -28,19 +67,16 @@ class WeightService
         return $weightEntry;
     }
 
-    public function updateEntry(array $attributes, string $id): WeightEntry
+    private function update(array $attributes, WeightEntry $weightEntry): WeightEntry
     {
-        $weightEntry = WeightEntry::query()->findOrFail($id);
-
         $weightEntry->entry = $attributes['entry'];
-        $weightEntry->note = isset($attributes['note']) ? $attributes['note'] : null;
         $weightEntry->date = $attributes['date'];
         $weightEntry->save();
 
         return $weightEntry;
     }
 
-    public function deleteEntry(string $id): bool
+    public function delete(string $id): bool
     {
         $weightEntry = WeightEntry::query()->findOrFail($id);
 

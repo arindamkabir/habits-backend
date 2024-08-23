@@ -17,7 +17,6 @@ class WeightEntryResource extends JsonResource
         return [
             'id' => $this->id,
             'entry' => $this->entry,
-            'note' => $this->note,
             'date' => $this->date,
             'user_id' => $this->user_id,
             'created_at' => $this->created_at,
