@@ -51,8 +51,6 @@ class HabitEntryController extends Controller
             ->where('date', $validated['date'])
             ->first();
 
-        info($entry);
-
         if (isset($entry)) {
             $responseEntry = $this->entryService->update($validated, $entry);
         } else {
