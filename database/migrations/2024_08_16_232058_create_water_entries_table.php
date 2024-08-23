@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('weight_entries', function (Blueprint $table) {
+        Schema::create('water_entries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users', 'id');
-            $table->decimal('entry', 5, 2);
+            $table->decimal('entry', 4, 2);
             $table->dateTime('date');
             $table->timestamps();
         });
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('weight_entries');
+        Schema::dropIfExists('water_entries');
     }
 };
