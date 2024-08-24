@@ -41,11 +41,12 @@ Route::middleware(['auth:sanctum'])->prefix('/health')->name('health.')->group(f
     Route::prefix('/weight')->name('weight.')->controller(WeightEntryController::class)->group(function () {
         Route::get('/chart', 'chart')->name('chart');
         Route::post('/entries', 'save')->name('entries.save');
-        Route::get('/entries', 'index')->name('entries.index');
         Route::get('/entries/{date}', 'show')->name('entries.show');
         Route::delete('/{id}', 'delete')->name('entries.delete');
     });
+
     Route::prefix('/water')->name('water.')->controller(WaterEntryController::class)->group(function () {
+        Route::get('/chart', 'chart')->name('chart');
         Route::post('/entries', 'save')->name('entries.save');
         Route::get('/entries/{date}', 'show')->name('entries.show');
         Route::delete('/{id}', 'delete')->name('entries.delete');
