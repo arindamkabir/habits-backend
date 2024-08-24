@@ -24,7 +24,7 @@ class WaterEntryController extends Controller
         };
 
         return $this->success(
-            'Weight chart data retrieved successfully.',
+            'Water chart data retrieved successfully.',
             $this->waterService->chart($request->input('time_period'))
         );
     }

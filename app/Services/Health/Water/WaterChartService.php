@@ -27,7 +27,7 @@ class WaterChartService
 
             $chart[$formattedDate] = [
                 'label' => $formattedDate,
-                'value' => null,
+                'value' => 0,
             ];
         }
 
@@ -61,7 +61,7 @@ class WaterChartService
 
             $chart[$formattedDate] = [
                 'label' => $formattedDate,
-                'value' => null,
+                'value' => 0,
             ];
         }
 

@@ -16,9 +16,9 @@ Route::get('/user', function (Request $request) {
 Route::post('/login', LoginController::class);
 
 Route::middleware(['auth:sanctum'])->prefix('/habits')->name('habits.')->group(function () {
-    Route::prefix('/entries')->name('entries.')->controller(HabitEntryController::class)->group(function () {
-        Route::post('/', 'save')->name('save');
-        Route::get('/{slug}', 'list')->name('list');
+    Route::name('entries.')->controller(HabitEntryController::class)->group(function () {
+        Route::post('/entries', 'save')->name('save');
+        Route::get('/{slug}/entries', 'list')->name('list');
     });
 
     Route::prefix('/categories')->name('categories.')->controller(HabitCategoryController::class)->group(function () {

@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\DB;
 
 class HabitService
 {
+    private HabitChartService $habitChartService;
+
+    public function __construct(HabitChartService $habitChartService)
+    {
+        $this->habitChartService = $habitChartService;
+    }
+
     public function list(array $filters)
     {
         return Habit::query()
@@ -41,98 +48,27 @@ class HabitService
             ->firstOrFail();
     }
 
-    public function monthlyChart(string $slug): array
+    public function chart(string $slug, string $timePeriod): array
     {
-        $habit = Habit::query()
-            ->where('slug', $slug)
-            ->currentUser()
-            ->firstOrFail();
+        $startEnd = [
+            'week' => [now()->startOfWeek(), now()->endOfWeek()],
+            '2weeks' => [now()->subWeek()->startOfWeek(), now()->endOfWeek()],
+            'month' => [now()->startOfMonth(), now()->endOfMonth()],
+            '3months' => [now()->subMonths(2)->startOfMonth(), now()->endOfMonth()],
+            '6months' => [now()->subMonths(5)->startOfMonth(), now()->endOfMonth()],
+            'year' => [now()->startOfYear(), now()->endOfYear()],
+        ];
 
-        $entries = $habit->entries()
-            ->whereBetween(
-                'date',
-                [now()->startOfMonth(), now()->endOfMonth()]
-            )
-            ->get();
+        [$start, $end] = $startEnd[$timePeriod];
 
-        $chart = [];
-
-        $period = CarbonPeriod::create(now()->startOfMonth(), '1 day', now()->endOfMonth());
-
-        foreach ($period as $date) {
-            $chart[$date->format('m-d')] = [
-                'label' => $date->format('m-d'),
-                'value' => 0,
-            ];
-        }
-
-        foreach ($entries as $entry) {
-            $chart[Carbon::parse($entry->date)->format('m-d')] = [
-                'label' => Carbon::parse($entry->date)->format('m-d'),
-                'value' => $entry->entry,
-            ];
-        }
-
-        return array_values($chart);
+        return ($timePeriod === 'year' || $timePeriod === '6months')
+            ? $this->habitChartService->monthly($slug, $start, $end)
+            : $this->habitChartService->daily($slug, $start, $end);
     }
 
     public function pieChart(string $slug, string $timePeriod): array
     {
-        $habit = Habit::query()
-            ->where('slug', $slug)
-            ->currentUser()
-            ->firstOrFail();
-
-        $entryType = $habit->entry_type;
-
-        $entries = $habit->entries()
-            ->when($timePeriod === 'week', function ($query) {
-                $query->whereBetween(
-                    'date',
-                    [now()->subWeek(), now()]
-                );
-            })
-            ->when($timePeriod === '2weeks', function ($query) {
-                $query->whereBetween(
-                    'date',
-                    [now()->subWeeks(2), now()]
-                );
-            })
-            ->when($timePeriod === 'month', function ($query) {
-                $query->whereBetween(
-                    'date',
-                    [now()->subMonth(), now()]
-                );
-            })
-            ->when($timePeriod === '3months', function ($query) {
-                $query->whereBetween(
-                    'date',
-                    [now()->subMonths(3), now()]
-                );
-            })
-            ->when($timePeriod === 'year', function ($query) {
-                $query->whereBetween(
-                    'date',
-                    [now()->subYear(), now()]
-                );
-            })
-            ->get();
-
-        $chart = [];
-
-        $chart['yes'] = [
-            'label' => 'Yes',
-            'value' => $entryType === "boolean"
-                ? $entries->where('entry', 1)->count()
-                : $entries->where('entry', '>', 0)->count(),
-        ];
-
-        $chart['no'] = [
-            'label' => 'No',
-            'value' => $entries->where('entry', 0)->count(),
-        ];
-
-        return array_values($chart);
+        return $this->habitChartService->pie($slug, $timePeriod);
     }
 
     public function store(array $validated): Habit

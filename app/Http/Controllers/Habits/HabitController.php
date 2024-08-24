@@ -42,11 +42,15 @@ class HabitController extends Controller
         );
     }
 
-    public function chart(string $slug): JsonResponse
+    public function chart(Request $request, $slug): JsonResponse
     {
+        if (!$request->input('time_period')) {
+            return $this->error('No time period found!.', 422);
+        };
+
         return $this->success(
             'Habit chart data retrieved successfully.',
-            $this->habitService->monthlyChart($slug)
+            $this->habitService->chart($slug, $request->time_period)
         );
     }
 
