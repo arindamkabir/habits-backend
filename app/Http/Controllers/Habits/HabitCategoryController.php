@@ -25,11 +25,7 @@ class HabitCategoryController extends Controller
 
     public function index(): ResourceCollection
     {
-        $categories = HabitCategory::query()
-            ->where('user_id', Auth::id())
-            ->get();
-
-        return HabitCategoryResource::collection($categories);
+        return HabitCategoryResource::collection($this->categoryService->list());
     }
 
     public function store(StoreHabitCategoryRequest $request): JsonResponse

@@ -17,25 +17,6 @@ class HabitSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seed habit categories
-        $category = new HabitCategory();
-        $category->name = 'Health';
-        $category->color = 'rose';
-        $category->user_id = 1;
-        $category->save();
-
-        $category = new HabitCategory();
-        $category->name = 'Education';
-        $category->color = 'amber'; // Purple color in hex
-        $category->user_id = 1;
-        $category->save();
-
-        $category = new HabitCategory();
-        $category->name = 'Fitness';
-        $category->color = 'emerald'; // Orange color in hex
-        $category->user_id = 1;
-        $category->save();
-
         // Seed habits
         $habit = new \App\Models\Habit();
         $habit->name = 'Drink water 3 bottles of water';

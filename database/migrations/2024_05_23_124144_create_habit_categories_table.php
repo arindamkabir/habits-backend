@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('habit_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('user_id')->constrained('users', 'id');
+            $table->foreignId('user_id')->nullable()->constrained('users', 'id');
             $table->string('icon')->nullable();
             $table->string('color');
+            $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });
     }
