@@ -14,8 +14,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            WeightEntrySeeder::class,
-            HabitSeeder::class
+            // WeightEntrySeeder::class,
+            // HabitSeeder::class
         ]);
     }
 }

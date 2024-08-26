@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('cigarette_goal')->nullable();
             $table->decimal('weight_goal', 5, 2)->nullable();
             $table->rememberToken();
+            $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });
 
