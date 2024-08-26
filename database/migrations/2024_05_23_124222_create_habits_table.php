@@ -19,6 +19,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users', 'id');
             $table->foreignId('category_id')->constrained('habit_categories', 'id');
             $table->enum('entry_type', ['number', 'boolean']);
+            $table->integer('goal')->nullable();
+            $table->integer('streak')->default(0);
+            $table->integer('best')->default(0);
+            $table->boolean('is_positive')->default(true);
+            $table->timestamp('archived_at')->nullable();
+            $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });
     }
