@@ -77,6 +77,7 @@ class HabitService
             $habit = new Habit;
             $habit->name = $validated['name'];
             $habit->category_id = $validated['category_id'];
+            $habit->description = $validated['description'];
             $habit->entry_type = $validated['entry_type'];
             $habit->user_id = Auth::id();
             $habit->save();
@@ -94,6 +95,7 @@ class HabitService
 
             $habit->name = $validated['name'];
             $habit->category_id = $validated['category_id'];
+            $habit->description = isset($validated['description']) ? $validated['description'] : $habit->description;
             $habit->save();
 
             return $habit;

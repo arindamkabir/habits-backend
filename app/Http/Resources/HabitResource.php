@@ -20,10 +20,11 @@ class HabitResource extends JsonResource
             'name' => $this->name,
             'category_id' => $this->category_id,
             'user_id' => $this->user_id,
-            'description' => $this->when(
-                $request->routeIs('habits.show'),
-                $this->description
-            ),
+            // 'description' => $this->when(
+            //     $request->routeIs('habits.show'),
+            //     $this->description
+            // ),
+            'description' => $this->description,
             'category' => $this->whenLoaded('category', function () {
                 return new HabitCategoryResource($this->category);
             }),
