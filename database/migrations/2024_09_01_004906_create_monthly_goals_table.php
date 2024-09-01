@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('habit_entries', function (Blueprint $table) {
+        Schema::create('monthly_goals', function (Blueprint $table) {
             $table->id();
-            $table->integer('entry');
-            $table->foreignId('habit_id')->constrained('habits', 'id');
-            $table->dateTime('date');
+            $table->foreignId('user_id')->constrained('users', 'id');
+            $table->date('month');
+            $table->integer('water_goal')->nullable();
+            $table->integer('cigarette_goal')->nullable();
+            $table->decimal('weight_goal', 5, 2)->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('habit_entries');
+        Schema::dropIfExists('monthly_goals');
     }
 };

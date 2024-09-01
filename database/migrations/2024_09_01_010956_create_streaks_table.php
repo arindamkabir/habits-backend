@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('habit_entries', function (Blueprint $table) {
+        Schema::create('streaks', function (Blueprint $table) {
             $table->id();
-            $table->integer('entry');
-            $table->foreignId('habit_id')->constrained('habits', 'id');
-            $table->dateTime('date');
+            $table->foreignId('user_id')->constrained('users', 'id');
+            $table->foreignId('habit_id')->nullable()->constrained('habits', 'id');
+            $table->enum('type', ['habit', 'cigarette', 'water', 'weight']);
+            $table->integer('streak');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('habit_entries');
+        Schema::dropIfExists('streaks');
     }
 };
