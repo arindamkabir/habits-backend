@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -17,6 +18,8 @@ class LoginController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        Log::info('User logged in', ['user' => $request->user()]);
 
         return $this->ok('Authenticated');
     }
