@@ -29,7 +29,7 @@ class HabitEntryService
         return DB::transaction(function () use ($validated) {
             $entry = new HabitEntry;
             $entry->entry = $validated['entry'];
-            $entry->note = $validated['note'] ?? null;
+            // $entry->note = $validated['note'] ?? null;
             $entry->habit_id = $validated['habit_id'];
             $entry->date = $validated['date'];
             $entry->save();
@@ -42,7 +42,7 @@ class HabitEntryService
     {
         return DB::transaction(function () use ($entry, $validated) {
             $entry->entry = $validated['entry'];
-            $entry->note = $validated['note'] ?? null;
+            // $entry->note = $validated['note'] ?? null;
             $entry->save();
 
             return $entry;
