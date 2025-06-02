@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Habits;
+namespace App\Http\Requests\Health;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreHabitRequest extends FormRequest
+class SaveCigaretteEntryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -23,10 +22,8 @@ class StoreHabitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:habit_categories,id',
-            'description' => 'nullable|string',
-            'entry_type' => Rule::in(['number', 'boolean']),
+            'entry' => 'required|numeric',
+            'date' => 'required|date',
         ];
     }
 }

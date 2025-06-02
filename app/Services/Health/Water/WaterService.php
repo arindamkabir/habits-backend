@@ -2,7 +2,9 @@
 
 namespace App\Services\Health\Water;
 
+use App\Models\Streak;
 use App\Models\WaterEntry;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class WaterService
@@ -64,6 +66,36 @@ class WaterService
         $waterEntry->date = $attributes['date'];
         $waterEntry->user_id = auth()->id();
         $waterEntry->save();
+
+        // Create a new streak or update the existing one if it exists for the current date only if the entry is greater than 2500ml.
+        // make sure you check for the existing streak for the current date ( start_date + value ) and update it if it exists.
+        // if the entry is less than 2500ml, end the streak if it exists for the current date by adding a end_date.
+
+        if ($waterEntry->entry >= 2.5) {
+            $streak = Streak::query()
+                ->where('start_date', Carbon::parse($waterEntry->date)->subDays())
+                ->whereNull('end_date')
+                ->first();
+
+            if (isset($streak)) {
+                $streak->value += 1;
+                $streak->save();
+            } else {
+                auth()->user()->streaks()->create([
+                    'type' => 'water',
+                    'value' => 1,
+                    'start_date' => $waterEntry->date,
+                ]);
+            }
+        } else {
+            $streak = auth()->user()->streaks()->where('start_date', $waterEntry->date)->first();
+
+            if (isset($streak)) {
+                $streak->end_date = $waterEntry->date;
+                $streak->save();
+            }
+        }
+
 
         return $waterEntry;
     }

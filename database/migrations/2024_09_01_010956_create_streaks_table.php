@@ -16,7 +16,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users', 'id');
             $table->foreignId('habit_id')->nullable()->constrained('habits', 'id');
             $table->enum('type', ['habit', 'cigarette', 'water', 'weight']);
-            $table->integer('streak');
+            $table->integer('value');
+            $table->date('start_date');
+            $table->date('end_date')->nullable();
             $table->timestamps();
         });
     }
